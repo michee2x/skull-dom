@@ -3,87 +3,497 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoSkeleton Demo</title>
+    <title>AutoSkeleton Demo - Complex Layouts</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .card {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 12px;
-            width: 300px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+            background: #f5f5f5;
+            margin: 0;
         }
-        .header {
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .demo-section {
+            margin-bottom: 60px;
+        }
+
+        .demo-section h2 {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .comparison-item h3 {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Shimmer Animation Keyframes */
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ============================================
+           CARD STYLES
+        ============================================ */
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .profile-header {
             display: flex;
             align-items: center;
             gap: 16px;
             margin-bottom: 20px;
         }
+
         .avatar {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background-color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .title h2 { margin: 0; font-size: 18px; }
-        .title p { margin: 4px 0 0; color: #666; font-size: 14px; }
-        .content {
-            font-size: 16px;
-            line-height: 1.5;
+
+        .profile-info h2 { 
+            margin: 0; 
+            font-size: 18px;
+            color: #222;
+        }
+        
+        .profile-info p { 
+            margin: 4px 0 0; 
+            color: #666; 
+            font-size: 14px; 
+        }
+
+        .profile-content {
+            font-size: 15px;
+            line-height: 1.6;
             color: #444;
+        }
+
+        /* E-commerce Product Card */
+        .product-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+            margin: 0 0 8px 0;
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Twitter-style Card */
+        .tweet-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .tweet-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tweet-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
+            flex-shrink: 0;
+        }
+
+        .tweet-user-info {
+            flex: 1;
+        }
+
+        .tweet-name {
+            font-weight: 700;
+            color: #222;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .tweet-handle {
+            color: #666;
+            font-size: 14px;
+            margin: 2px 0 0 0;
+        }
+
+        .tweet-content {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #222;
+            margin-bottom: 12px;
+        }
+
+        .tweet-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tweet-stats {
+            display: flex;
+            gap: 24px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Complex Dashboard Card */
+        .dashboard-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .dashboard-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #222;
+            margin: 0;
+        }
+
+        .dashboard-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+            margin: 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin: 4px 0 0 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-chart {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 8px;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div style="display: flex; gap: 50px;">
-        <!-- The Real Component -->
-        <div>
-            <h3>Original</h3>
-            <div id="target" class="card">
-                <div class="header">
-                    <img class="avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" />
-                    <div class="title">
-                        <h2>User Name</h2>
-                        <p>Software Engineer</p>
+    <h1>🎨 AutoSkeleton Demo - Complex Layouts</h1>
+
+    <!-- Profile Card Demo -->
+    <div class="demo-section">
+        <h2>📱 Profile Card</h2>
+        <div class="comparison">
+            <div class="comparison-item">
+                <h3>Original</h3>
+                <div id="profile-original" class="profile-card">
+                    <div class="profile-header">
+                        <div class="avatar"></div>
+                        <div class="profile-info">
+                            <h2>Sarah Johnson</h2>
+                            <p>Senior Product Designer</p>
+                            <p>San Francisco, CA</p>
+                        </div>
+                    </div>
+                    <div class="profile-content">
+                        Passionate about creating beautiful and intuitive user experiences. 
+                        10+ years in design, specializing in mobile and web applications.
                     </div>
                 </div>
-                <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.
-                </div>
             </div>
-        </div>
-
-        <!-- The Resulting Skeleton -->
-        <div>
-            <h3>Generated Skeleton</h3>
-            <div id="output"></div>
+            <div class="comparison-item">
+                <h3>Generated Skeleton</h3>
+                <div id="profile-skeleton"></div>
+            </div>
         </div>
     </div>
 
-    <!-- We must compile TS to JS to run this, or use a bundler. 
-         For this demo, we can just use the compiled output if we run `npx tsc` 
-         but for now I'll inline a minimal script that uses ES modules if served 
-         or just manually verify via console if I can run the node script.
-         
-         Actually, let's use the code we generated.
-         I will assume we can bundle or I will paste the logic here for the 'Manual Demo' verification 
-         if the user opens this file.
-    -->
+    <!-- Profile Card with Hints Demo -->
+    <div class="demo-section">
+        <h2>✨ Profile Card with Hints (Tailwind)</h2>
+        <div class="comparison">
+            <div class="comparison-item">
+                <h3>Original with data-skeleton hints</h3>
+                <div id="profile-hints-original" class="profile-card" data-skeleton="w-full max-w-sm bg-white rounded-xl p-6 shadow-lg">
+                    <div class="profile-header" data-skeleton="flex items-center gap-4 mb-5">
+                        <div class="avatar" data-skeleton="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500"></div>
+                        <div class="profile-info" data-skeleton="flex-1">
+                            <h2 data-skeleton="h-5 w-32 bg-gray-300 rounded mb-2">Sarah Johnson</h2>
+                            <p data-skeleton="h-4 w-40 bg-gray-200 rounded mb-1">Senior Product Designer</p>
+                            <p data-skeleton="h-4 w-36 bg-gray-200 rounded">San Francisco, CA</p>
+                        </div>
+                    </div>
+                    <div class="profile-content" data-skeleton="space-y-2">
+                        <p data-skeleton="h-4 w-full bg-gray-200 rounded">Passionate about creating beautiful and intuitive user experiences.</p>
+                        <p data-skeleton="h-4 w-5/6 bg-gray-200 rounded">10+ years in design, specializing in mobile and web applications.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <h3>Generated Skeleton (with hints)</h3>
+                <div id="profile-hints-skeleton"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-commerce Product Card Demo -->
+    <div class="demo-section">
+        <h2>🛍️ E-commerce Product Card</h2>
+        <div class="comparison">
+            <div class="comparison-item">
+                <h3>Original</h3>
+                <div id="product-original" class="product-card">
+                    <div class="product-image"></div>
+                    <div class="product-info">
+                        <div class="product-category">Electronics</div>
+                        <h3 class="product-title">Wireless Noise-Cancelling Headphones</h3>
+                        <p class="product-description">
+                            Premium sound quality with active noise cancellation. 
+                            30-hour battery life and comfortable design.
+                        </p>
+                        <div class="product-footer">
+                            <div class="product-price">$299</div>
+                            <div class="product-rating">⭐ 4.8 (2.4k)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <h3>Generated Skeleton</h3>
+                <div id="product-skeleton"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Twitter Card Demo -->
+    <div class="demo-section">
+        <h2>🐦 Twitter-Style Card</h2>
+        <div class="comparison">
+            <div class="comparison-item">
+                <h3>Original</h3>
+                <div id="tweet-original" class="tweet-card">
+                    <div class="tweet-header">
+                        <div class="tweet-avatar"></div>
+                        <div class="tweet-user-info">
+                            <p class="tweet-name">Alex Chen</p>
+                            <p class="tweet-handle">@alexchen · 2h</p>
+                        </div>
+                    </div>
+                    <div class="tweet-content">
+                        Just shipped a new feature that automatically generates skeleton screens! 
+                        No more manual skeleton component creation. Check it out! 🚀
+                    </div>
+                    <div class="tweet-image"></div>
+                    <div class="tweet-stats">
+                        <span>💬 42</span>
+                        <span>🔁 128</span>
+                        <span>❤️ 1.2K</span>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <h3>Generated Skeleton</h3>
+                <div id="tweet-skeleton"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Card Demo -->
+    <div class="demo-section">
+        <h2>📊 Complex Dashboard Card</h2>
+        <div class="comparison">
+            <div class="comparison-item">
+                <h3>Original</h3>
+                <div id="dashboard-original" class="dashboard-card">
+                    <div class="dashboard-header">
+                        <h3 class="dashboard-title">Monthly Analytics</h3>
+                        <div class="dashboard-badge">Premium</div>
+                    </div>
+                    <div class="dashboard-stats">
+                        <div class="stat-item">
+                            <p class="stat-value">24.5K</p>
+                            <p class="stat-label">Views</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-value">1,842</p>
+                            <p class="stat-label">Clicks</p>
+                        </div>
+                        <div class="stat-item">
+                            <p class="stat-value">7.2%</p>
+                            <p class="stat-label">CTR</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-chart"></div>
+                </div>
+            </div>
+            <div class="comparison-item">
+                <h3>Generated Skeleton</h3>
+                <div id="dashboard-skeleton"></div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { inferNode } from './dist/core/infer/inferNode.js';
         import { renderSkeleton } from './dist/core/render/renderSkeleton.js';
 
+        // Inject shimmer animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shimmer {
+                0% { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
         // Wait for styles to apply
         window.addEventListener('load', () => {
-            const target = document.getElementById('target');
-            const output = document.getElementById('output');
+            // Generate skeletons for all demo cards
+            const demos = [
+                { original: 'profile-original', skeleton: 'profile-skeleton' },
+                { original: 'profile-hints-original', skeleton: 'profile-hints-skeleton' },
+                { original: 'product-original', skeleton: 'product-skeleton' },
+                { original: 'tweet-original', skeleton: 'tweet-skeleton' },
+                { original: 'dashboard-original', skeleton: 'dashboard-skeleton' }
+            ];
 
-            const skeletonTree = inferNode(target);
-            console.log("Inferred Tree:", skeletonTree);
+            demos.forEach(demo => {
+                const originalEl = document.getElementById(demo.original);
+                const skeletonContainer = document.getElementById(demo.skeleton);
 
-            const skeletonDOM = renderSkeleton(skeletonTree);
-            output.appendChild(skeletonDOM);
+                if (originalEl && skeletonContainer) {
+                    const skeletonTree = inferNode(originalEl);
+                    console.log(`${demo.original} - Inferred Tree:`, skeletonTree);
+
+                    const skeletonDOM = renderSkeleton(skeletonTree);
+                    skeletonContainer.appendChild(skeletonDOM);
+                }
+            });
         });
     </script>
 </body>
