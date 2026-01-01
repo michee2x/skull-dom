@@ -22,7 +22,7 @@ export class SkeletonOverlayManager {
 
     const parent = target.parentElement;
     if (!parent) {
-      console.warn("AutoSkeleton: Target element has no parent, cannot attach overlay.");
+      console.warn("SkullDOM: Target element has no parent, cannot attach overlay.");
       // Return a dummy record so the caller doesn't crash, but nothing happened.
       return { skeletonEl, restoreVisibility: "" };
     }

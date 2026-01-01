@@ -1,12 +1,12 @@
-# 💀 AutoSkeleton
+# 💀 SkullDOM
 > **Automagic skeleton screens for any framework.**
 > Zero config. Zero manual styles. Just robust, layout-aware loading states.
 
-## Why AutoSkeleton?
+## Why SkullDOM?
 
 Most skeleton libraries require you to manually build "skeleton versions" of your components. You end up maintaining two UIs: the real one and the fake one.
 
-**AutoSkeleton is different.**
+**SkullDOM is different.**
 It looks at your **existing DOM**, infers its layout (text, images, grids, flex), and overlays a pixel-perfect skeleton on top of it.
 
 - **Framework Agnostic:** First-class adapters for React, Vue, Svelte, Solid, and Vanilla.
@@ -19,7 +19,7 @@ It looks at your **existing DOM**, infers its layout (text, images, grids, flex)
 ## 📦 Installation
 
 ```bash
-npm install autoskeleton
+npm install skull-dom
 ```
 
 ---
@@ -32,14 +32,14 @@ Add attributes to your HTML. No JS required.
 ```html
 <!-- 1. Import the utility once in your app entry -->
 <script>
-  import { initSkeletonObserver } from 'autoskeleton/vanilla';
+  import { initSkeletonObserver } from 'skull-dom/vanilla';
   initSkeletonObserver();
 </script>
 
 <!-- 2. Toggle the attribute when loading -->
 <div data-skeleton="loading">
   <h1>My Content</h1>
-  <p>AutoSkeleton will infer this text structure and cover it.</p>
+  <p>SkullDOM will infer this text structure and cover it.</p>
 </div>
 ```
 
@@ -48,7 +48,7 @@ Use the `useSkeleton` hook.
 
 ```tsx
 import { useRef } from 'react';
-import { useSkeleton } from 'autoskeleton/react';
+import { useSkeleton } from 'skull-dom/react';
 
 function UserCard({ isLoading, user }) {
   const ref = useRef(null);
@@ -70,7 +70,7 @@ Use the `v-skeleton` directive.
 
 ```vue
 <script setup>
-import { vSkeleton } from 'autoskeleton/vue';
+import { vSkeleton } from 'skull-dom/vue';
 defineProps(['loading']);
 </script>
 
@@ -86,7 +86,7 @@ Use the `skeleton` action.
 
 ```svelte
 <script>
-  import { skeleton } from 'autoskeleton/adapters/svelte';
+  import { skeleton } from 'skull-dom/adapters/svelte';
   export let loading = true;
 </script>
 
@@ -99,7 +99,7 @@ Use the `skeleton` action.
 Use the `skeleton` directive.
 
 ```jsx
-import { skeleton } from 'autoskeleton/solid';
+import { skeleton } from 'skull-dom/solid';
 
 <div use:skeleton={isLoading()}>
   {/* content */}
@@ -110,7 +110,7 @@ import { skeleton } from 'autoskeleton/solid';
 
 ## 🧠 How it Works
 
-AutoSkeleton operates on a simple "Overlay" mental model:
+SkullDOM operates on a simple "Overlay" mental model:
 
 1.  **Probe:** It scans your target DOM element and measures computed styles (width, height, margin, padding, line-height, etc.).
 2.  **Infer:** It creates a lightweight tree representation of what matters (Text lines? Block? Flex group?).
@@ -118,7 +118,7 @@ AutoSkeleton operates on a simple "Overlay" mental model:
 4.  **Overlay:** It sets your original element to `visibility: hidden` and absolutely positions the skeleton layer directly on top of it.
 
 ### Important: You need content!
-Because AutoSkeleton **infers** from your DOM, your elements need to exist in the DOM (even if empty).
+Because SkullDOM **infers** from your DOM, your elements need to exist in the DOM (even if empty).
 *   ✅ **Good:** Render your component with empty strings or optional chaining.
 *   ❌ **Bad:** `if (loading) return null;` (There is nothing to infer!)
 
@@ -146,7 +146,7 @@ function Card({ loading, data }) {
 If you are building your own adapter, import from the root.
 
 ```ts
-import { attachSkeleton } from 'autoskeleton';
+import { attachSkeleton } from 'skull-dom';
 
 // Returns a cleanup function
 const cleanup = attachSkeleton(myElement);
@@ -156,7 +156,7 @@ cleanup();
 ```
 
 ### Styling
-Currently, AutoSkeleton injects a default gray theme (`#d1d5db` base, `#9ca3af` text lines) with a modest border radius. 
+Currently, SkullDOM injects a default gray theme (`#d1d5db` base, `#9ca3af` text lines) with a modest border radius. 
 Future versions will expose CSS variables for theming.
 
 ---

@@ -18,7 +18,7 @@ export function attachSkeleton(target: HTMLElement): () => void {
   // 2. Infer & Render
   const tree = inferNode(target);
   if (!tree) {
-    console.warn("AutoSkeleton: Could not infer structure for element", target);
+    console.warn("SkullDOM: Could not infer structure for element", target);
     return () => {};
   }
   
