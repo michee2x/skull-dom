@@ -458,9 +458,100 @@
         </div>
     </div>
 
+    <!-- Interactive Overlay Demo -->
+    <div class="demo-section">
+        <h2>🔄 Interactive Overlay Mode (The "Real" Library Behavior)</h2>
+        <p style="margin-bottom: 20px; color: #666;">
+            Click "Toggle Loading" to see how the skeleton attaches as an overlay on top of the existing content, preserving layout without replacement.
+        </p>
+
+        <div class="comparison" style="grid-template-columns: 1fr;"> <!-- Single column -->
+            <div class="comparison-item">
+                <div style="margin-bottom: 15px;">
+                    <button id="toggle-overlay-btn" style="
+                        padding: 8px 16px; 
+                        background: #667eea; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 6px; 
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: background 0.2s;
+                    ">Toggle Loading</button>
+                    <span id="overlay-status" style="margin-left: 10px; font-size: 14px; color: #666;">State: <strong>Visible</strong></span>
+                </div>
+
+                <!-- Target for Overlay -->
+                <!-- Note: wrapper needs to handle the positioning context -->
+                <div id="overlay-wrapper" style="position: relative; max-width: 400px;"> 
+                    <div id="profile-overlay-target" class="profile-card">
+                        <div class="profile-header">
+                            <div class="avatar"></div>
+                            <div class="profile-info">
+                                <h2>Sarah Johnson</h2>
+                                <p>Senior Product Designer</p>
+                                <p>San Francisco, CA</p>
+                            </div>
+                        </div>
+                        <div class="profile-content">
+                            Passionate about creating beautiful and intuitive user experiences. 
+                            10+ years in design, specializing in mobile and web applications.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vanilla Adapter Demo -->
+    <div class="demo-section">
+        <h2>🔌 Vanilla Adapter Mode (Attribute-Based)</h2>
+        <p style="margin-bottom: 20px; color: #666;">
+            This uses the <code>MutationObserver</code>. The button below <strong>only</strong> toggles the <code>data-skeleton="loading"</code> attribute. The adapter handles the rest automatically.
+        </p>
+
+        <div class="comparison" style="grid-template-columns: 1fr;">
+            <div class="comparison-item">
+                <div style="margin-bottom: 15px;">
+                    <button id="toggle-attr-btn" style="
+                        padding: 8px 16px; 
+                        background: #10b981; 
+                        color: white; 
+                        border: none; 
+                        border-radius: 6px; 
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: background 0.2s;
+                    ">Toggle Attribute (data-skeleton)</button>
+                    <span id="attr-status" style="margin-left: 10px; font-size: 14px; color: #666;">Attribute: <strong>none</strong></span>
+                </div>
+
+                <!-- Target for Attribute Adapter -->
+                <div style="position: relative; max-width: 400px;"> 
+                    <!-- We start with data-skeleton="" (empty) or missing -->
+                    <div id="vanilla-adapter-target" class="tweet-card">
+                        <div class="tweet-header">
+                            <div class="tweet-avatar"></div>
+                            <div class="tweet-user-info">
+                                <p class="tweet-name">AutoSkeleton</p>
+                                <p class="tweet-handle">@autoskeleton · Just now</p>
+                            </div>
+                        </div>
+                        <div class="tweet-content">
+                            I am being controlled by a MutationObserver! 
+                            No manual JS calls are touching me. 🪄
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { inferNode } from './dist/core/infer/inferNode.js';
         import { renderSkeleton } from './dist/core/render/renderSkeleton.js';
+        import { attachSkeleton } from './dist/core/lifecycle/attachSkeleton.js';
+        import { initSkeletonObserver } from './dist/adapters/vanilla/index.js';
 
         // Inject shimmer animation keyframes
         const style = document.createElement('style');
@@ -495,6 +586,60 @@
                     skeletonContainer.appendChild(skeletonDOM);
                 }
             });
+
+            // Interactive Overlay Demo Logic
+            const toggleBtn = document.getElementById('toggle-overlay-btn');
+            const statusSpan = document.getElementById('overlay-status');
+            const targetEl = document.getElementById('profile-overlay-target');
+            
+            let detachSkeleton = null; // Function to remove skeleton
+
+            if (toggleBtn && targetEl && statusSpan) {
+                toggleBtn.addEventListener('click', () => {
+                    if (detachSkeleton) {
+                        // Currently loading -> Return to normal
+                        detachSkeleton();
+                        detachSkeleton = null;
+                        statusSpan.innerHTML = 'State: <strong>Visible</strong>';
+                        toggleBtn.textContent = 'Toggle Loading';
+                        toggleBtn.style.background = '#667eea';
+                    } else {
+                        // Currently normal -> Attach skeleton
+                        detachSkeleton = attachSkeleton(targetEl);
+                        statusSpan.innerHTML = 'State: <strong>Loading (Skeleton Overlay)</strong>';
+                        toggleBtn.textContent = 'Stop Loading';
+                        toggleBtn.style.background = '#e53e3e'; // Red for stop
+                    }
+                });
+            }
+
+            // Vanilla Adapter Demo Logic
+            // 1. Initialize the global observer
+            initSkeletonObserver();
+
+            const attrBtn = document.getElementById('toggle-attr-btn');
+            const attrStatusSpan = document.getElementById('attr-status');
+            const attrTarget = document.getElementById('vanilla-adapter-target');
+
+            if (attrBtn && attrTarget && attrStatusSpan) {
+                attrBtn.addEventListener('click', () => {
+                    const currentAttr = attrTarget.getAttribute('data-skeleton');
+                    
+                    if (currentAttr === 'loading') {
+                        // Stop loading
+                        attrTarget.removeAttribute('data-skeleton');
+                        attrStatusSpan.innerHTML = 'Attribute: <strong>none</strong>';
+                        attrBtn.textContent = 'Start Loading (data-skeleton="loading")';
+                        attrBtn.style.background = '#10b981';
+                    } else {
+                        // Start loading
+                        attrTarget.setAttribute('data-skeleton', 'loading');
+                        attrStatusSpan.innerHTML = 'Attribute: <strong>loading</strong>';
+                        attrBtn.textContent = 'Stop Loading';
+                        attrBtn.style.background = '#e53e3e';
+                    }
+                });
+            }
         });
     </script>
 </body>

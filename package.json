@@ -1,19 +1,65 @@
 {
   "name": "autoskeleton",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./vanilla": {
+      "types": "./dist/adapters/vanilla/index.d.ts",
+      "import": "./dist/adapters/vanilla/index.js"
+    },
+    "./react": {
+      "types": "./dist/adapters/react/index.d.ts",
+      "import": "./dist/adapters/react/index.js"
+    },
+    "./vue": {
+      "types": "./dist/adapters/vue/index.d.ts",
+      "import": "./dist/adapters/vue/index.js"
+    },
+    "./svelte": {
+      "types": "./dist/adapters/svelte/index.d.ts",
+      "import": "./dist/adapters/svelte/index.js"
+    },
+    "./solid": {
+      "types": "./dist/adapters/solid/index.d.ts",
+      "import": "./dist/adapters/solid/index.js"
+    }
+  },
+  "keywords": [
+    "skeleton",
+    "loader",
+    "automatic",
+    "react",
+    "solid",
+    "vanilla"
+  ],
   "type": "module",
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "build": "tsc",
+    "dev": "npm run build && npx -y http-server -p 3000 -o demo.html",
+    "start": "npm run dev"
   },
-  "keywords": [],
+
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
     "jsdom": "^27.4.0",
+    "react": "^19.2.3",
+    "solid-js": "^1.9.10",
+    "svelte": "^5.46.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "vue": "^3.5.26"
   }
 }
