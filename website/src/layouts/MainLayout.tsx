@@ -45,7 +45,7 @@ export default function MainLayout() {
               Documentation
             </Link>
             <a
-              href="https://github.com/michee/skull-dom"
+              href="https://github.com/michee2x/skull-dom"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium text-neutral-400 hover:text-white transition-colors"
@@ -56,7 +56,7 @@ export default function MainLayout() {
 
           <div className="flex items-center gap-4">
             <a
-               href="https://github.com/michee/skull-dom"
+               href="https://github.com/michee2x/skull-dom"
                target="_blank"
                rel="noopener noreferrer"
                className="md:hidden text-neutral-400 hover:text-white transition-colors"
