@@ -76,7 +76,7 @@ export default function MainLayout() {
                   <button className="btn-primary text-xs px-3 py-2 md:text-sm md:px-5 md:py-2">
                     Get Started
                   </button>
-                </Link>
+                </Link>                                                                                            
               </>
             ) : (
               <Link to="/docs">
