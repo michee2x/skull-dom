@@ -99,8 +99,7 @@ export default function MainLayout() {
             <h4 className="font-bold mb-4 text-sm text-white uppercase tracking-wider">Getting Started</h4>
             <ul className="space-y-4 text-base">
               <li><Link to="/docs" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Introduction</Link></li>
-              <li><Link to="/docs/installation" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Installation</Link></li>
-              <li><Link to="/docs/usage" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Basic Usage</Link></li>
+              <li><Link to="/docs/configuration" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Animations & Config</Link></li>
             </ul>
           </div>
           <div>
@@ -109,6 +108,8 @@ export default function MainLayout() {
               <li><Link to="/docs/react" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">React</Link></li>
               <li><Link to="/docs/vue" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Vue</Link></li>
               <li><Link to="/docs/svelte" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Svelte</Link></li>
+              <li><Link to="/docs/solid" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">SolidJS</Link></li>
+              <li><Link to="/docs/vanilla" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Vanilla / HTML</Link></li>
             </ul>
           </div>
         </div>
