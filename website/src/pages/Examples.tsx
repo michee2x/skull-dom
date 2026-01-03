@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { DashboardExample } from '../components/examples/DashboardExample';
 import { ProfileExample } from '../components/examples/ProfileExample';
 import { ProductListingExample } from '../components/examples/ProductListingExample';
+import { type SkeletonConfig } from 'skull-dom';
 
 export default function Examples() {
   const [dashboardLoading, setDashboardLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [productLoading, setProductLoading] = useState(false);
   
-  const [dashboardConfig, setDashboardConfig] = useState({ animation: 'wave' });
-  const [profileConfig, setProfileConfig] = useState({ animation: 'wave' });
-  const [productConfig, setProductConfig] = useState({ animation: 'wave' });
+  const [dashboardConfig, setDashboardConfig] = useState<SkeletonConfig>({ animation: 'wave' });
+  const [profileConfig, setProfileConfig] = useState<SkeletonConfig>({ animation: 'wave' });
+  const [productConfig, setProductConfig] = useState<SkeletonConfig>({ animation: 'wave' });
 
   return (
     <div className="container mx-auto px-6 py-12 min-h-screen">
