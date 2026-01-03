@@ -3,6 +3,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import DocsLayout from './pages/Docs';
+import Examples from './pages/Examples';
 import Introduction from './pages/docs/Introduction';
 import ReactDocs from './pages/docs/ReactDocs';
 import VueDocs from './pages/docs/VueDocs';
@@ -27,6 +28,7 @@ function App() {
               <Route path="vanilla" element={<VanillaDocs />} />
               <Route path="configuration" element={<ConfigurationDocs />} />
             </Route>
+            <Route path="examples" element={<Examples />} />
           </Route>
         </Routes>
       </BrowserRouter>

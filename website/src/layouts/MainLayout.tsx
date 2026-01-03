@@ -44,6 +44,9 @@ export default function MainLayout() {
             <Link to="/docs" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors">
               Documentation
             </Link>
+            <Link to="/examples" className="text-sm font-medium text-neutral-400 hover:text-white transition-colors">
+              Examples
+            </Link>
             <a
               href="https://github.com/michee2x/skull-dom"
               target="_blank"
@@ -110,6 +113,12 @@ export default function MainLayout() {
               <li><Link to="/docs/svelte" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Svelte</Link></li>
               <li><Link to="/docs/solid" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">SolidJS</Link></li>
               <li><Link to="/docs/vanilla" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Vanilla / HTML</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4 text-sm text-white uppercase tracking-wider">Examples</h4>
+            <ul className="space-y-4 text-base">
+              <li><Link to="/examples" className="block text-neutral-300 hover:text-white transition-colors border-b border-neutral-800 pb-2">Live Examples</Link></li>
             </ul>
           </div>
         </div>

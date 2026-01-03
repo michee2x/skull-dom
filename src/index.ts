@@ -7,4 +7,4 @@ export { inferNode } from "./core/infer/inferNode.js";
 export { renderSkeleton } from "./core/render/renderSkeleton.js";
 
 // Types
-export type { SkeletonNode } from "./core/infer/types.js";
+export type { SkeletonNode, SkeletonConfig } from "./core/infer/types.js";
