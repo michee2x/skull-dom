@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 py-20 bg-black">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 bg-black">
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -32,7 +32,7 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto">
-            <Link to="/docs" className="w-full sm:w-auto">
+            <Link href="/docs" className="w-full sm:w-auto">
               <button className="btn-primary flex items-center justify-center gap-2 text-[14px] md:text-base w-full">
                 Get Started
                 <ArrowRight className="w-5 h-5" />

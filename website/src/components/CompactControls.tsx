@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { type SkeletonConfig } from 'skull-dom';
 import { Play, Pause, Settings, X } from 'lucide-react';

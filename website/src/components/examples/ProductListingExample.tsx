@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef } from 'react';
 import { useSkeleton } from 'skull-dom/react';
 import { type SkeletonConfig } from 'skull-dom';

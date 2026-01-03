@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export default function CTASection() {
@@ -11,7 +11,7 @@ export default function CTASection() {
         <p className="text-xl text-neutral-400 mb-10 max-w-2xl mx-auto">
           Join developers who are building better user experiences with automated skeleton screens.
         </p>
-        <Link to="/docs">
+        <Link href="/docs">
           <button className="btn-primary text-lg px-10 py-4 inline-flex items-center gap-2">
             Get Started Now
             <ArrowRight className="w-5 h-5" />
