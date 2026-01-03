@@ -10,6 +10,7 @@ export interface SkeletonBase {
 export interface SkeletonText extends SkeletonBase {
     kind: "text";
     lines: number;
+    textLines?: { width: number; height: number }[];
 }
 
 export interface SkeletonBlock extends SkeletonBase {
@@ -22,11 +23,23 @@ export interface SkeletonGroup extends SkeletonBase {
     gap: number;
     children: SkeletonNode[];
     // Flex/Grid alignment properties
-    justifyContent?: string; // justify-content (e.g., "space-between", "center")
-    alignItems?: string; // align-items (e.g., "center", "flex-start")
-    flexWrap?: string; // flex-wrap (e.g., "wrap", "nowrap")
-    gridTemplateColumns?: string; // grid-template-columns
-    gridTemplateRows?: string; // grid-template-rows
+    justifyContent?: string; 
+    alignItems?: string; 
+    flexWrap?: string; 
+    gridTemplateColumns?: string; 
+    gridTemplateRows?: string; 
+}
+
+export type AnimationType = 
+    | 'pulse' | 'wave' | 'glimmer' | 'scan' | 'breathing' 
+    | 'fade-in' | 'slide-in' | 'rumble' | 'neon' 
+    | 'classic' | 'shimmer-vertical' | 'bounce';
+
+export interface SkeletonConfig {
+    animation?: AnimationType;
+    color?: string; // Base color
+    highlightColor?: string; // Highlight/Shimmer color
+    borderRadius?: number; // Global radius override
 }
 
 export type SkeletonNode = SkeletonBlock | SkeletonText | SkeletonGroup;

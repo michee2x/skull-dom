@@ -467,6 +467,54 @@
 
         <div class="comparison" style="grid-template-columns: 1fr;"> <!-- Single column -->
             <div class="comparison-item">
+                <div style="margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; color: #888;">Configuration</h4>
+                    
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+                        <!-- Animation Select -->
+                        <div>
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #555;">Animation</label>
+                            <select id="anim-select" style="padding: 6px; border-radius: 4px; border: 1px solid #ccc;">
+                                <option value="wave">Wave (Default)</option>
+                                <option value="pulse">Pulse</option>
+                                <option value="glimmer">Glimmer</option>
+                                <option value="scan">Scan</option>
+                                <option value="breathing">Breathing</option>
+                                <option value="neon">Neon</option>
+                                <option value="bounce">Bounce</option>
+                                <option value="shimmer-vertical">Vertical Shimmer</option>
+                                <option value="rumble">Rumble</option>
+                                <option value="fade-in">Fade In</option>
+                                <option value="slide-in">Slide In</option>
+                                <option value="classic">Classic (Static)</option>
+                            </select>
+                        </div>
+
+                        <!-- Color -->
+                        <div>
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #555;">Base Color</label>
+                            <input type="color" id="base-color" value="#d1d5db" style="height: 30px; cursor: pointer;">
+                        </div>
+
+                        <!-- Highlight -->
+                        <div>
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #555;">Highlight</label>
+                            <input type="color" id="highlight-color" value="#e5e7eb" style="height: 30px; cursor: pointer;">
+                        </div>
+
+                        <!-- Apply Button (to restart if running) -->
+                        <button id="apply-config" style="
+                            padding: 6px 12px; 
+                            background: #6b7280; 
+                            color: white; 
+                            border: none; 
+                            border-radius: 4px; 
+                            cursor: pointer;
+                            font-size: 12px;
+                        ">Apply to Running</button>
+                    </div>
+                </div>
+
                 <div style="margin-bottom: 15px;">
                     <button id="toggle-overlay-btn" style="
                         padding: 8px 16px; 
@@ -552,15 +600,8 @@
         import { attachSkeleton } from './dist/core/lifecycle/attachSkeleton.js';
         import { initSkeletonObserver } from './dist/adapters/vanilla/index.js';
 
-        // Inject shimmer animation keyframes
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shimmer {
-                0% { background-position: 200% 0; }
-                100% { background-position: -200% 0; }
-            }
-        `;
-        document.head.appendChild(style);
+        // Inject shimmer animation keyframes - REMOVED (Handled by library now)
+
 
         // Wait for styles to apply
         window.addEventListener('load', () => {
@@ -586,12 +627,26 @@
                 }
             });
 
-            // Interactive Overlay Demo Logic
+        // Interactive Overlay Demo Logic
             const toggleBtn = document.getElementById('toggle-overlay-btn');
             const statusSpan = document.getElementById('overlay-status');
             const targetEl = document.getElementById('profile-overlay-target');
             
+            // Config Inputs
+            const animSelect = document.getElementById('anim-select');
+            const baseColorInput = document.getElementById('base-color');
+            const highlightColorInput = document.getElementById('highlight-color');
+            const applyBtn = document.getElementById('apply-config');
+
             let detachSkeleton = null; // Function to remove skeleton
+
+            function getConfig() {
+                return {
+                    animation: animSelect.value,
+                    color: baseColorInput.value,
+                    highlightColor: highlightColorInput.value
+                };
+            }
 
             if (toggleBtn && targetEl && statusSpan) {
                 toggleBtn.addEventListener('click', () => {
@@ -602,12 +657,26 @@
                         statusSpan.innerHTML = 'State: <strong>Visible</strong>';
                         toggleBtn.textContent = 'Toggle Loading';
                         toggleBtn.style.background = '#667eea';
+                        applyBtn.disabled = true;
                     } else {
                         // Currently normal -> Attach skeleton
-                        detachSkeleton = attachSkeleton(targetEl);
-                        statusSpan.innerHTML = 'State: <strong>Loading (Skeleton Overlay)</strong>';
+                        const config = getConfig();
+                        detachSkeleton = attachSkeleton(targetEl, config);
+                        
+                        statusSpan.innerHTML = `State: <strong>Loading (${config.animation})</strong>`;
                         toggleBtn.textContent = 'Stop Loading';
                         toggleBtn.style.background = '#e53e3e'; // Red for stop
+                        applyBtn.disabled = false;
+                    }
+                });
+
+                // Allow updating while running
+                applyBtn.addEventListener('click', () => {
+                    if (detachSkeleton) {
+                        detachSkeleton(); // Detach old
+                        const config = getConfig();
+                        detachSkeleton = attachSkeleton(targetEl, config); // Re-attach new
+                        statusSpan.innerHTML = `State: <strong>Loading (${config.animation})</strong>`;
                     }
                 });
             }

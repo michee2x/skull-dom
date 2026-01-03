@@ -15,22 +15,70 @@ export function inferNode(el: HTMLElement): SkeletonNode | null {
 
     let lineHeight: number;
     if (lineHeightStr === 'normal') {
-      // Browser default is typically 1.2
       lineHeight = fontSize * 1.2;
     } else if (lineHeightStr.endsWith('px')) {
-      // Explicit pixel value like "24px"
       lineHeight = parseFloat(lineHeightStr);
     } else {
-      // Unitless multiplier like "1.5"
       lineHeight = parseFloat(lineHeightStr) * fontSize;
     }
 
-    // "Single element should not be represented as multiple lines except it has a line height css property"
-    // If line-height is 'normal', force lines = 1.
-    // Otherwise calculate based on height.
-    let lines = 1;
-    if (lineHeightStr !== 'normal') {
-      lines = Math.max(1, Math.round(probeData.height / lineHeight));
+    // Use Range API for precise line detection
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const rects = Array.from(range.getClientRects());
+
+    let textLines: { width: number, height: number }[] = [];
+
+    if (rects.length > 0) {
+      // Group rects by vertical position (Y) to identify lines
+      const linesMap = new Map<number, { minX: number, maxX: number, top: number, bottom: number }>();
+      const threshold = 4; // Pixel threshold to consider rects on the same line
+
+      rects.forEach(rect => {
+        if (rect.width === 0 || rect.height === 0) return; // Ignore invisible rects
+
+        // Find an existing line group that matches this top
+        let foundKey = -1;
+        for (const key of linesMap.keys()) {
+          if (Math.abs(key - rect.top) < threshold) {
+            foundKey = key;
+            break;
+          }
+        }
+
+        if (foundKey !== -1) {
+          const group = linesMap.get(foundKey)!;
+          group.minX = Math.min(group.minX, rect.left);
+          group.maxX = Math.max(group.maxX, rect.right);
+          group.bottom = Math.max(group.bottom, rect.bottom); // Track max bottom to calc height
+        } else {
+          linesMap.set(rect.top, {
+            minX: rect.left,
+            maxX: rect.right,
+            top: rect.top,
+            bottom: rect.bottom
+          });
+        }
+      });
+
+      // Convert groups to sorted lines
+      textLines = Array.from(linesMap.values())
+        .sort((a, b) => a.top - b.top)
+        .map(g => ({
+          width: g.maxX - g.minX,
+          height: g.bottom - g.top // Calculate exact height of the line
+        }));
+    }
+
+    let lines = textLines.length;
+
+    // Fallback if Range API failed to detect specific lines or returned 0
+    if (lines === 0) {
+      if (lineHeightStr !== 'normal') {
+        lines = Math.max(1, Math.round(probeData.height / lineHeight));
+      } else {
+        lines = 1;
+      }
     }
 
     return {
@@ -38,6 +86,7 @@ export function inferNode(el: HTMLElement): SkeletonNode | null {
       width: probeData.width,
       height: lineHeight, // Height of a single line
       lines,
+      textLines,
       radius: parseFloat(probeData.borderRadius) || 4, // Default radius for text
       padding: probeData.styles.padding,
       margin: probeData.styles.margin,
