@@ -1,18 +1,16 @@
 # 💀 SkullDOM
+
 > **Automagic skeleton screens for any framework.**
 > Zero config. Zero manual styles. Just robust, layout-aware loading states.
 
 ## Why SkullDOM?
-
-Most skeleton libraries require you to manually build "skeleton versions" of your components. You end up maintaining two UIs: the real one and the fake one.
-
-**SkullDOM is different.**
-It looks at your **existing DOM**, infers its layout (text, images, grids, flex), and overlays a pixel-perfect skeleton on top of it.
+Most skeleton libraries require you to manually build "skeleton versions" of your components.
+**SkullDOM is different.** It looks at your **existing DOM**, infers its layout (text, images, grids, flex), and overlays a pixel-perfect skeleton on top of it.
 
 - **Framework Agnostic:** First-class adapters for React, Vue, Svelte, Solid, and Vanilla.
-- **Zero Layout Shift:** It overlays perfectly on your actual elements.
+- **0 Layout Shift:** Uses `Range` API to capture exact text wrapping and dimensions.
+- **12+ Animations:** Built-in premium animations (Wave, Neon, Glimmer, etc.).
 - **Automagic Inference:** Detects text lines, border radii, and flex gaps automatically.
-- **Memory Safe:** Uses `WeakMap` to ensure skeletons are garbage collected automatically.
 
 ---
 
@@ -24,26 +22,9 @@ npm install skull-dom
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Usage
 
-### 1. Vanilla / HTML Variables
-Add attributes to your HTML. No JS required.
-
-```html
-<!-- 1. Import the utility once in your app entry -->
-<script>
-  import { initSkeletonObserver } from 'skull-dom/vanilla';
-  initSkeletonObserver();
-</script>
-
-<!-- 2. Toggle the attribute when loading -->
-<div data-skeleton="loading">
-  <h1>My Content</h1>
-  <p>SkullDOM will infer this text structure and cover it.</p>
-</div>
-```
-
-### 2. React
+### React
 Use the `useSkeleton` hook.
 
 ```tsx
@@ -53,19 +34,25 @@ import { useSkeleton } from 'skull-dom/react';
 function UserCard({ isLoading, user }) {
   const ref = useRef(null);
   
-  // Automagically handles attach/detach lifecycle
+  // 1. Basic Usage
   useSkeleton(ref, isLoading);
+
+  // 2. With Configuration
+  // useSkeleton(ref, isLoading, { 
+  //   animation: 'neon', 
+  //   color: '#3b82f6' 
+  // });
 
   return (
     <div ref={ref} className="card">
-      <img src={user.avatar} className="avatar" />
+      <img src={user.avatar} />
       <h3>{user.name}</h3>
     </div>
   );
 }
 ```
 
-### 3. Vue
+### Vue
 Use the `v-skeleton` directive.
 
 ```vue
@@ -75,89 +62,115 @@ defineProps(['loading']);
 </script>
 
 <template>
+  <!-- Basic -->
   <div v-skeleton="loading" class="card">
-    <!-- content -->
+    <h1>Content</h1>
+  </div>
+
+  <!-- With Configuration -->
+  <div v-skeleton="{ loading, config: { animation: 'pulse' } }">
+    <h1>Content</h1>
   </div>
 </template>
 ```
 
-### 4. Svelte
+### Svelte
 Use the `skeleton` action.
 
 ```svelte
 <script>
-  import { skeleton } from 'skull-dom/adapters/svelte';
+  import { skeleton } from 'skull-dom/svelte';
   export let loading = true;
 </script>
 
+<!-- Basic -->
 <div use:skeleton={loading}>
-  <!-- content -->
+  <h1>Content</h1>
+</div>
+
+<!-- With Configuration -->
+<div use:skeleton={{ loading, config: { animation: 'glimmer' } }}>
+  <h1>Content</h1>
 </div>
 ```
 
-### 5. SolidJS
+### SolidJS
 Use the `skeleton` directive.
 
 ```jsx
 import { skeleton } from 'skull-dom/solid';
 
+// Basic
 <div use:skeleton={isLoading()}>
-  {/* content */}
+  <h1>Content</h1>
+</div>
+
+// With Configuration
+<div use:skeleton={{ loading: isLoading(), config: { animation: 'wave', borderRadius: 8 } }}>
+  <h1>Content</h1>
+</div>
+```
+
+### Vanilla / HTML
+Add `data-skeleton="loading"` to any element.
+
+```html
+<!-- 1. Initialize once -->
+<script type="module">
+  import { initSkeletonObserver } from 'skull-dom/adapters/vanilla';
+  initSkeletonObserver();
+</script>
+
+<!-- 2. Toggle attribute to show skeleton -->
+<div data-skeleton="loading">
+  <h1>I am covered!</h1>
+</div>
+
+<!-- 3. With Configuration (JSON) -->
+<div 
+  data-skeleton="loading" 
+  data-skeleton-config='{ "animation": "neon", "color": "#10b981" }'
+>
+  <h1>Custom Style</h1>
 </div>
 ```
 
 ---
 
-## 🧠 How it Works
+## 🎨 Animations & Config
 
-SkullDOM operates on a simple "Overlay" mental model:
+You can customize the look and feel by passing a config object.
 
-1.  **Probe:** It scans your target DOM element and measures computed styles (width, height, margin, padding, line-height, etc.).
-2.  **Infer:** It creates a lightweight tree representation of what matters (Text lines? Block? Flex group?).
-3.  **Render:** It builds a mirrored DOM structure with gray backgrounds and shimmer animations.
-4.  **Overlay:** It sets your original element to `visibility: hidden` and absolutely positions the skeleton layer directly on top of it.
-
-### Important: You need content!
-Because SkullDOM **infers** from your DOM, your elements need to exist in the DOM (even if empty).
-*   ✅ **Good:** Render your component with empty strings or optional chaining.
-*   ❌ **Bad:** `if (loading) return null;` (There is nothing to infer!)
-
-**Correct Pattern:**
-```jsx
-// React Example
-function Card({ loading, data }) {
-  const ref = useRef(null);
-  useSkeleton(ref, loading);
-
-  return (
-    <div ref={ref}>
-      {/* Render structure even if data is missing! */}
-      <h1>{data?.title || 'Placeholder Title'}</h1> 
-    </div>
-  )
+```typescript
+interface SkeletonConfig {
+  animation?: 'wave' | 'pulse' | 'glimmer' | 'scan' | 'breathing' 
+            | 'fade-in' | 'slide-in' | 'rumble' | 'neon' 
+            | 'classic' | 'shimmer-vertical' | 'bounce';
+            
+  color?: string;          // Base background color (e.g. #d1d5db)
+  highlightColor?: string; // Shimmer/Highlight color
+  borderRadius?: number;   // Force global border radius
 }
 ```
 
+### Animation Presets
+- **`wave`** (Default): Standard left-to-right gradient shimmer.
+- **`pulse`**: Opacity fades in and out.
+- **`glimmer`**: Thin white reflection shoots across.
+- **`scan`**: Cyberpunk-style vertical scanner.
+- **`neon`**: Glowing box-shadow pulse.
+- **`breathing`**: Subtle scale up/down.
+- **`classic`**: Static gray box (no animation).
+- And more! (`slide-in`, `fade-in`, `rumble`, `bounce`...)
+
 ---
 
-## 🧩 API Reference
+## 🧠 How it Works regarding "Zero Layout Shift"
 
-### Core (Advanced)
-If you are building your own adapter, import from the root.
+SkullDOM uses the browser's **Range API** to create a pixel-perfect "snapshot" of your text nodes. 
+Instead of guessing how many lines of text you have, it measures the **exact bounding box of every line** as rendered by the browser. 
 
-```ts
-import { attachSkeleton } from 'skull-dom';
-
-// Returns a cleanup function
-const cleanup = attachSkeleton(myElement);
-
-// Later...
-cleanup();
-```
-
-### Styling
-Currently, SkullDOM injects a default gray theme (`#d1d5db` base, `#9ca3af` text lines) with a modest border radius. 
-Future versions will expose CSS variables for theming.
+This means if your text wraps in a unique way around an image, the skeleton will wrap exactly the same way.
 
 ---
 

@@ -19,7 +19,17 @@ export function initSkeletonObserver() {
 
         if (state === "loading" && !cleanupMap.has(el)) {
             // Start loading
-            const cleanup = attachSkeleton(el);
+            let config = undefined;
+            const configStr = el.getAttribute("data-skeleton-config");
+            if (configStr) {
+                try {
+                    config = JSON.parse(configStr);
+                } catch (e) {
+                    console.warn("SkullDOM: Invalid JSON in data-skeleton-config", configStr);
+                }
+            }
+
+            const cleanup = attachSkeleton(el, config);
             cleanupMap.set(el, cleanup);
         } else if (state !== "loading" && cleanupMap.has(el)) {
             // Stop loading

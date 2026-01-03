@@ -36,7 +36,7 @@ export const vSkeleton: ObjectDirective<HTMLElementWithCleanup, boolean | { load
         if (isLoading && !el._skCleanup) {
             el._skCleanup = attachSkeleton(el, config);
         } // If value turned false and we HAVE cleanup, detach
-        else if (!binding.value && el._skCleanup) {
+        else if (!isLoading && el._skCleanup) {
             el._skCleanup();
             el._skCleanup = undefined;
         }
