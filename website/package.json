@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "npm --prefix .. install && tsc -p ../tsconfig.json && next build",
+        "build": "npm --prefix .. install --only=development && tsc -p ../tsconfig.json && next build",
         "start": "next start",
         "lint": "next lint"
     },
